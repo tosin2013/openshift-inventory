@@ -1,0 +1,9 @@
+- hosts: localhost
+  vars:
+   ansible_connection: local
+  remote_user: root
+  gather_facts: no
+  vars_files:
+    - ../defaults/main.yml
+  tasks:
+    - include: ../tasks/main.yml

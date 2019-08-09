@@ -1,0 +1,34 @@
+---
+# defaults file for openshift-inventory
+inventory_destination: ~/workspace/openshift-inventory/tests
+instances:
+  - name: master
+    inventory_group: masters
+    qty: 1
+  - name: infra
+    inventory_group: infra
+    qty: 2
+  - name: node
+    inventory_group: nodes
+    qty: 2
+  - name: lb
+    inventory_group: lbs
+    qty: 1
+domain: .example.com
+glusterfs: True
+htpasswd_file_path: /home/example/openshift-ansible/passwordFile
+openshift_release: "3.11"
+openshift_image_tag: v3.11.104
+openshift_pkg_version: 3.11.104
+openshift_deployment_type: openshift-enterprise
+rhsm_username: ""
+rhsm_password: ""
+ssh_username: ""
+glusterfs_block_host_vol_size: 190
+metrics_storage_volume_size: 10Gi
+
+# Features
+enable_openshift_operators: True
+enable_metrics: True
+enable_logging: False
+enable_prometheous_operator: False
