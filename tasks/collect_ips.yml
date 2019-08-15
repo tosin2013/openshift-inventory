@@ -1,0 +1,26 @@
+- name: create inventory file for ips
+  vars:
+    vm_name: "ocp-{{ outer_item.name }}{{ '%02x' |format(inner_item) }}"
+    vm_group: "{{ outer_item.inventory_group }}"
+  shell: |
+     echo "$(ping -c1 {{ vm_name }}{{ domain }} | sed -nE 's/^PING[^(]+\(([^)]+)\).*/\1/p'), {{ vm_name }}"
+  failed_when: "'service not known' in ip_address.stderr"
+  register: ip_address
+  loop: "{{ range(1, outer_item.qty|int +1)|list }}"
+  loop_control:
+    loop_var: inner_item
+    label: "{{ vm_name }}"
+  when: vm_group == 'nodes'
+
+- name: Ping result
+  debug: "var=ip_address.results"
+  ignore_errors: yes
+  #when: not ip_address.results[0].skipped
+
+- include_tasks: save_ip.yml
+  with_items: "{{ ip_address.results }}"
+  loop_control:
+    loop_var: ip_addr
+  #when: not ip_address.results[0].skipped
+  
+

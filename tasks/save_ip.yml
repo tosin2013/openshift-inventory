@@ -1,0 +1,22 @@
+- name: test ip
+  debug: "var=ip_addr"
+  ignore_errors: no
+
+- set_fact:
+     get_ip: "{{ ip_addr.stdout.split(',')[0] }}"
+     get_vm: "{{ ip_addr.stdout.split(',')[1] }}"
+  ignore_errors: yes
+
+- name: debug info
+  debug:
+    msg: "{{ get_ip }} and {{ get_vm }}"
+  ignore_errors: yes
+
+
+- name: Save info to gluster_nodes
+  vars:
+      my_vm:  "{{ ip_addr.stdout.split(',')[1] }}"
+      my_ip: "{{ ip_addr.stdout.split(',')[0] }}"
+  set_fact:
+    gluster_nodes: "{{ gluster_nodes|default([]) + [ {'machine_name':  my_vm,    'ip_address': my_ip  }] }}"
+  ignore_errors: yes
