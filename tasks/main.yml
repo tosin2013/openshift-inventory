@@ -22,6 +22,19 @@
   debug:
     var: all_nodes
 
+- name: loop through vm types
+  include_tasks: collect_ips.yml
+  loop: "{{ instances }}"
+  loop_control:
+    loop_var: outer_item
+    label: outer_item.name
+
+
+- name: show gluster_nodes
+  debug:
+    var: gluster_nodes
+
+
 - name: deploy openshift template
   template:
     src: templates/inventory.3.11.rhel.gluster
