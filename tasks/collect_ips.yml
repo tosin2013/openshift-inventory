@@ -3,7 +3,7 @@
     vm_name: "ocp-{{ outer_item.name }}{{ '%02x' |format(inner_item) }}"
     vm_group: "{{ outer_item.inventory_group }}"
   shell: |
-     echo "$(ping -c1 {{ vm_name }}{{ domain }} | sed -nE 's/^PING[^(]+\(([^)]+)\).*/\1/p'), {{ vm_name }}"
+     echo "$(ping -c1 {{ vm_name }}.{{ domain }} | sed -nE 's/^PING[^(]+\(([^)]+)\).*/\1/p'), {{ vm_name }}"
   failed_when: "'service not known' in ip_address.stderr"
   register: ip_address
   loop: "{{ range(1, outer_item.qty|int +1)|list }}"
