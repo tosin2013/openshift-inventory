@@ -6,40 +6,40 @@ glusterfs
 
 [etcd]
 {% for master in masters %}
-{{ master }}{{ domain }} openshift_public_hostname={{ master }}{{ domain }}
+{{ master }}.{{ domain }} openshift_public_hostname={{ master }}.{{ domain }}
 {% endfor %}
 
 [masters]
 {%  for master in masters %}
-{{ master }}{{ domain }} openshift_public_hostname={{ master }}{{ domain }}
+{{ master }}.{{ domain }} openshift_public_hostname={{ master }}.{{ domain }}
 {% endfor %}
 
 [nodes]
 {% for all in all_nodes %}
 {% if 'ocp-master' in all %}
-{{ all }}{{ domain }} openshift_public_hostname={{ all }}{{ domain }} openshift_node_group_name='node-config-master'
+{{ all }}.{{ domain }} openshift_public_hostname={{ all }}.{{ domain }} openshift_node_group_name='node-config-master'
 {% endif %}
 {% if 'ocp-infra' in all %}
-{{ all }}{{ domain }} openshift_public_hostname={{ all }}{{ domain }} openshift_node_group_name='node-config-infra'
+{{ all }}.{{ domain }} openshift_public_hostname={{ all }}.{{ domain }} openshift_node_group_name='node-config-infra'
 {% endif %}
 {% if 'ocp-node' in all %}
-{{ all }}{{ domain }} openshift_public_hostname={{ all }}{{ domain }} openshift_node_group_name='node-config-compute'
+{{ all }}.{{ domain }} openshift_public_hostname={{ all }}.{{ domain }} openshift_node_group_name='node-config-compute'
 {% endif %}
 {% endfor %}
 
 [lb]
 {%  for lb in lbs %}
-{{ lb }}{{ domain }}
+{{ lb }}.{{ domain }}
 {% endfor %}
 
 {% if glusterfs %}
 [glusterfs]
 {% for all in gluster_nodes %}
 {% if 'ocp-infra' in all.machine_name  %}
-{{ all.machine_name  }}{{ domain }} glusterfs_ip={{ all.ip_address }} glusterfs_zone=1  glusterfs_devices='["/dev/vdc"]'
+{{ all.machine_name  }}.{{ domain }} glusterfs_ip={{ all.ip_address }} glusterfs_zone=1  glusterfs_devices='["/dev/vdc"]'
 {% endif %}
 {% if 'ocp-node' in all.machine_name  %}
-{{ all.machine_name }}{{ domain }} glusterfs_ip={{ all.ip_address }} glusterfs_zone=2  glusterfs_devices='["/dev/vdc"]'
+{{ all.machine_name }}.{{ domain }} glusterfs_ip={{ all.ip_address }} glusterfs_zone=2  glusterfs_devices='["/dev/vdc"]'
 {% endif %}
 {% endfor %}
 {% endif %}
