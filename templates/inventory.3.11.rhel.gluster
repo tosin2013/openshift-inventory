@@ -3,6 +3,7 @@ masters
 nodes
 etcd
 glusterfs
+lb
 
 [etcd]
 {% for master in masters %}
