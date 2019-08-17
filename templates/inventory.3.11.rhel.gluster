@@ -54,7 +54,7 @@ openshift_image_tag={{ openshift_image_tag }}
 openshift_pkg_version={{ openshift_pkg_version }}
 openshift_deployment_type={{ openshift_deployment_type }}
 
-oreg_url=registry.redhat.io/openshift3/ose-\${component}:\${version}
+oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
 oreg_auth_user={{ rhsm_username }}
 oreg_auth_password={{ rhsm_password }}
 
@@ -65,7 +65,7 @@ openshift_hosted_registry_selector="node-role.kubernetes.io/infra=true"
 
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
 openshift_master_htpasswd_file= {{ htpasswd_file_path }}
-#openshift_master_default_subdomain=apps{{ domain }}
+openshift_master_default_subdomain=apps.{{ domain }}
 os_firewall_use_firewalld=true
 
 {% if enable_openshift_operators %}
