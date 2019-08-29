@@ -11,7 +11,8 @@
     loop_var: inner_item
     label: "{{ vm_name }}"
   when: vm_group == 'nodes'
-
+  ignore_errors: no
+  
 - name: Ping result
   debug: "var=ip_address.results"
   ignore_errors: yes
@@ -22,5 +23,3 @@
   loop_control:
     loop_var: ip_addr
   #when: not ip_address.results[0].skipped
-  
-
