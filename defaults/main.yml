@@ -28,6 +28,7 @@ glusterfs_block_host_vol_size: 190
 metrics_storage_volume_size: 10Gi
 
 # Features
+enable_firewalld: false
 enable_openshift_operators: True
 enable_metrics: True
 enable_logging: False

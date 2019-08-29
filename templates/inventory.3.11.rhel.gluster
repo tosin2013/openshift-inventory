@@ -72,8 +72,9 @@ openshift_master_default_subdomain=apps.{{ domain }}
 openshift_master_cluster_hostname={{ lb }}.{{ domain }}
 {% endfor %}
 
+{%if enable_firewalld %}
 os_firewall_use_firewalld=true
-
+{% endif %}
 
 # Enable cockpit
 osm_use_cockpit=true
