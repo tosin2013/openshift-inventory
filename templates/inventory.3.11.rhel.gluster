@@ -3,7 +3,9 @@ masters
 nodes
 etcd
 glusterfs
+{% if lbs %}
 lb
+{% endif %}
 
 [etcd]
 {% for master in masters %}
@@ -28,10 +30,12 @@ lb
 {% endif %}
 {% endfor %}
 
+{% if lbs %}
 [lb]
 {%  for lb in lbs %}
 {{ lb }}.{{ domain }}
 {% endfor %}
+{% endif %}
 
 {% if glusterfs %}
 [glusterfs]
@@ -67,10 +71,12 @@ openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 
 openshift_master_htpasswd_file= {{ htpasswd_file_path }}
 openshift_master_default_subdomain=apps.{{ domain }}
 
+{% if lbs %}
 #Set cluster_hostname to point at your load balancer
 {%  for lb in lbs %}
 openshift_master_cluster_hostname={{ lb }}.{{ domain }}
 {% endfor %}
+{% endif %}
 
 {%if enable_firewalld %}
 os_firewall_use_firewalld=true
