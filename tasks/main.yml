@@ -9,14 +9,22 @@
 - name: show masters
   debug:
     var: masters
+  when: masters is defined
 
 - name: show nodes
   debug:
     var: nodes
+  when: nodes is defined
 
 - name: show lb
   debug:
     var: lbs
+  when: lbs is defined
+
+- name: show computes
+  debug:
+    var: computes
+  when: computes is defined
 
 - name: show nodes
   debug:
@@ -29,11 +37,9 @@
     loop_var: outer_item
     label: outer_item.name
 
-
 - name: show gluster_nodes
   debug:
     var: gluster_nodes
-
 
 - name: deploy openshift template
   template:

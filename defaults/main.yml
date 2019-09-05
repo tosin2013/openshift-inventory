@@ -3,16 +3,16 @@
 inventory_destination: ~/workspace/openshift-inventory/tests
 instances:
   - name: master
-    inventory_group: masters
+    cluster_group: masters
     qty: 1
   - name: infra
-    inventory_group: infra
+    cluster_group: infra
     qty: 2
   - name: node
-    inventory_group: nodes
+    cluster_group: nodes
     qty: 2
   - name: lb
-    inventory_group: lbs
+    cluster_group: lbs
     qty: 1
 domain: example.com # do not put a . in front of domain
 glusterfs: True
