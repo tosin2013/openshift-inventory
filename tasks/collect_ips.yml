@@ -10,7 +10,7 @@
   loop_control:
     loop_var: inner_item
     label: "{{ vm_name }}"
-  when: vm_group == 'nodes'
+  when: vm_group == 'nodes' or vm_group == 'infra'
   ignore_errors: no
 
 - name: Ping result
