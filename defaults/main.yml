@@ -19,7 +19,7 @@ glusterfs: True
 htpasswd_file_path: /home/example/openshift-ansible/passwordFile
 openshift_release: "3.11"
 openshift_image_tag: v3.11.135
-openshift_pkg_version: -3.11.125
+openshift_pkg_version: -3.11.135
 openshift_deployment_type: openshift-enterprise
 rhsm_username: ""
 rhsm_password: ""
