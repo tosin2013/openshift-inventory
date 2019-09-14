@@ -49,12 +49,12 @@
 
 - name: "deploy openshift template minimal"
   template:
-    src: ../templates/invenory.3.11.rhel.minimal
+    src: ../templates/inventory.3.11.rhel.minimal
     dest: "{{ inventory_destination }}"
   when: "'minimal-cns' in deployment_type"
 
 - name: "deploy openshift template minimal"
   template:
-    src: ../templates/invenory.3.11.rhel.minimal
+    src: ../templates/inventory.3.11.rhel.minimal
     dest: "{{ inventory_destination }}"
   when: "'minimal' in deployment_type"

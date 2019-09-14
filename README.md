@@ -50,7 +50,7 @@ Example Playbook
     ansible_connection: local
     remote_user: root
     deployment_type: minimal
-    inventory_destination: invenory.3.11.rhel.minimal
+    inventory_destination: inventory.3.11.rhel.minimal
     instances:
       - name: master
         cluster_group: masters
@@ -87,7 +87,7 @@ Example Playbook
     ansible_connection: local
     remote_user: root
     deployment_type: minimal
-    inventory_destination: invenory.3.11.rhel.minimal.gluster
+    inventory_destination: inventory.3.11.rhel.minimal.gluster
     instances:
       - name: master
         cluster_group: masters

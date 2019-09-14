@@ -1,0 +1,106 @@
+# Create an OSEv3 group that contains the masters, nodes, and etcd groups
+[OSEv3:children]
+masters
+nodes
+etcd
+
+# Set variables common for all OSEv3 hosts
+[OSEv3:vars]
+# SSH user, this user should allow ssh based auth without requiring a password
+ansible_ssh_user={{ ssh_username }}
+
+# If ansible_ssh_user is not root, ansible_become must be set to true
+ansible_become=true
+
+openshift_release={{ openshift_release }}
+openshift_image_tag={{ openshift_image_tag }}
+openshift_pkg_version={{ openshift_pkg_version }}
+openshift_deployment_type={{ openshift_deployment_type }}
+
+oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
+oreg_auth_user={{ rhsm_username }}
+oreg_auth_password={{ rhsm_password }}
+
+openshift_disable_check=memory_availability,disk_availability
+
+{% if glusterfs %}
+# registry
+openshift_hosted_registry_storage_kind=glusterfs
+openshift_hosted_registry_storage_volume_size=10Gi
+openshift_hosted_registry_selector="node-role.kubernetes.io/infra=true"
+{% endif %}
+
+{%if enable_firewalld %}
+os_firewall_use_firewalld=true
+{% endif %}
+
+# Enable cockpit
+osm_use_cockpit=true
+
+# Set cockpit plugins
+osm_cockpit_plugins=['cockpit-kubernetes']
+
+# uncomment the following to enable htpasswd authentication; defaults to DenyAllPasswordIdentityProvider
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
+openshift_master_htpasswd_file= {{ htpasswd_file_path }}
+
+openshift_master_default_subdomain=apps.{{ domain }}
+
+{% if glusterfs %}
+# Container image to use for glusterfs pods
+openshift_storage_glusterfs_image="registry.redhat.io/rhgs3/rhgs-server-rhel7:v3.11"
+
+# Container image to use for glusterblock-provisioner pod
+openshift_storage_glusterfs_block_image="registry.redhat.io/rhgs3/rhgs-gluster-block-prov-rhel7:v3.11"
+
+# Container image to use for heketi pods
+openshift_storage_glusterfs_heketi_image="registry.redhat.io/rhgs3/rhgs-volmanager-rhel7:v3.11"
+
+# OCS storage cluster
+openshift_storage_glusterfs_namespace=app-storage
+openshift_storage_glusterfs_storageclass=true
+openshift_storage_glusterfs_storageclass_default=true
+openshift_storage_glusterfs_block_deploy=true
+openshift_storage_glusterfs_block_host_vol_create=true
+openshift_storage_glusterfs_block_host_vol_size={{ glusterfs_block_host_vol_size }}
+openshift_storage_glusterfs_block_storageclass=true
+openshift_storage_glusterfs_block_storageclass_default=false
+{% endif %}
+
+# host group for masters
+[masters]
+{%  for master in masters %}
+{{ master }}.{{ domain }} openshift_public_hostname={{ master }}.{{ domain }}
+{% endfor %}
+
+# host group for etcd
+[etcd]
+{%  for master in masters %}
+{{ master }}.{{ domain }} openshift_public_hostname={{ master }}.{{ domain }}
+{% endfor %}
+
+# host group for nodes, includes region info
+[nodes]
+{% for all in all_nodes %}
+{% if 'ocp-master' in all %}
+{{ all }}.{{ domain }} openshift_public_hostname={{ all }}.{{ domain }} openshift_node_group_name='node-config-master'
+{% endif %}
+{% if 'ocp-infra' in all %}
+{{ all }}.{{ domain }} openshift_public_hostname={{ all }}.{{ domain }} openshift_node_group_name='node-config-infra'
+{% endif %}
+{% if 'ocp-node' in all %}
+{{ all }}.{{ domain }} openshift_public_hostname={{ all }}.{{ domain }} openshift_node_group_name='node-config-compute'
+{% endif %}
+{% endfor %}
+
+{% if glusterfs %}
+[glusterfs]
+{% for all in gluster_nodes %}
+{% if 'ocp-infra' in all.machine_name  %}
+{{ all.machine_name  }}.{{ domain }} glusterfs_ip={{ all.ip_address }} glusterfs_zone=1  glusterfs_devices='["/dev/vdc"]'
+{% endif %}
+{% if 'ocp-node' in all.machine_name  %}
+{{ all.machine_name }}.{{ domain }} glusterfs_ip={{ all.ip_address }} glusterfs_zone=2  glusterfs_devices='["/dev/vdc"]'
+{% endif %}
+{% endfor %}
+{% endif %}
