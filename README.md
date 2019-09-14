@@ -12,10 +12,10 @@ Role Variables
 
 | Variables                     | Required | Default                                      | Description                                                                                                                     |
 |-------------------------------|----------|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| deployment_type               | X        | cns                                          | Defines the deployment type.                                                                                                    |
+| deployment_type               | X        | minimal-standard                                          | Defines the deployment type.                                                                                                    |
 | inventory_destination         | X        | /tmp                                         | Defines destination of inventory file                                                                                           |
 | instances                     | X        |                                              | Defines the name of master, infra, nodes and load  load balancers deployed on system. The name automatically increments 01,02.  |
-| - name                        | X        | - master   - infra - node - lb                 | Defines the default name of the machine                                                                                         |
+| - name                        | X        | - master - infra - node - lb                 | Defines the default name of the machine                                                                                         |
 | - cluster_group               | X        |  - masters - infra - nodes - lbs             | Defines the cluster group for the enviornment. The is used to group the machines in the inventory.                              |
 | - qty                         | X        | - 1 - 2 - 2 - 1                              | Defines the number of each vm in the inventory file                                                                             |
 | domain                        | X        | example.com                                  | The default domain for the OpenShift Cluster                                                                                    |

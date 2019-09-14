@@ -43,18 +43,18 @@
 
 - name: "deploy openshift template cns"
   template:
-    src: ../templates/inventory.3.11.rhel.gluster
+    src: templates/inventory.3.11.rhel.gluster
     dest: "{{ inventory_destination }}"
   when: "'standard' in deployment_type"
 
 - name: "deploy openshift template minimal"
   template:
-    src: ../templates/inventory.3.11.rhel.minimal
+    src: templates/inventory.3.11.rhel.minimal
     dest: "{{ inventory_destination }}"
   when: "'minimal-cns' in deployment_type"
 
 - name: "deploy openshift template minimal"
   template:
-    src: ../templates/inventory.3.11.rhel.minimal
+    src: templates/inventory.3.11.rhel.minimal
     dest: "{{ inventory_destination }}"
   when: "'minimal' in deployment_type"
