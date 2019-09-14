@@ -12,8 +12,8 @@ Role Variables
 
 | Variables                     | Required | Default                                      | Description                                                                                                                     |
 |-------------------------------|----------|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| deployment_type               | X        | minimal-standard                                          | Defines the deployment type.                                                                                                    |
-| inventory_destination         | X        | /tmp                                         | Defines destination of inventory file                                                                                           |
+| deployment_type               | X        | standard                                          | Defines the deployment type.                                                                                                    |
+| inventory_destination         | X        | ~/workspace/openshift-inventory/inventory                                         | Defines destination of inventory file                                                                                           |
 | instances                     | X        |                                              | Defines the name of master, infra, nodes and load  load balancers deployed on system. The name automatically increments 01,02.  |
 | - name                        | X        | - master - infra - node - lb                 | Defines the default name of the machine                                                                                         |
 | - cluster_group               | X        |  - masters - infra - nodes - lbs             | Defines the cluster group for the enviornment. The is used to group the machines in the inventory.                              |
