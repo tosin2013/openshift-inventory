@@ -15,7 +15,7 @@ Role Variables
 | deployment_type               | X        | cns                                          | Defines the deployment type.                                                                                                    |
 | inventory_destination         | X        | /tmp                                         | Defines destination of inventory file                                                                                           |
 | instances                     | X        |                                              | Defines the name of master, infra, nodes and load  load balancers deployed on system. The name automatically increments 01,02.  |
-| - name                        | X        | - master - infra - node - lb                 | Defines the default name of the machine                                                                                         |
+| - name                        | X        | - master   - infra - node - lb                 | Defines the default name of the machine                                                                                         |
 | - cluster_group               | X        |  - masters - infra - nodes - lbs             | Defines the cluster group for the enviornment. The is used to group the machines in the inventory.                              |
 | - qty                         | X        | - 1 - 2 - 2 - 1                              | Defines the number of each vm in the inventory file                                                                             |
 | domain                        | X        | example.com                                  | The default domain for the OpenShift Cluster                                                                                    |
@@ -86,7 +86,7 @@ Example Playbook
   vars:
     ansible_connection: local
     remote_user: root
-    deployment_type: minimal
+    deployment_type: minimal-cns
     inventory_destination: inventory.3.11.rhel.minimal.gluster
     instances:
       - name: master
@@ -101,8 +101,9 @@ Example Playbook
       - name: lb
         cluster_group: lbs
         qty: 0
-    domain: example.com # do not put a . in front of domain
+    domain: lab.example # do not put a . in front of domain
     glusterfs: True
+    glusterfs_block_host_vol_size: 190
     htpasswd_file_path: "/home/example/openshift-ansible/passwordFile"
     openshift_release: "3.11"
     openshift_image_tag: v3.11.141
