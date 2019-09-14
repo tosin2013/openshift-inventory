@@ -84,7 +84,7 @@ os_firewall_use_firewalld=true
 
 # Enable cockpit
 osm_use_cockpit=true
-#
+
 # Set cockpit plugins
 osm_cockpit_plugins=['cockpit-kubernetes']
 

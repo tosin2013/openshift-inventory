@@ -19,4 +19,5 @@
       my_ip: "{{ ip_addr.stdout.split(',')[0] }}"
   set_fact:
     gluster_nodes: "{{ gluster_nodes|default([]) + [ {'machine_name':  my_vm,    'ip_address': my_ip  }] }}"
+  when: ("'infra' in get_vm" or "'node' in get_vm")
   ignore_errors: yes

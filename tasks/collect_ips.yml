@@ -11,15 +11,19 @@
     loop_var: inner_item
     label: "{{ vm_name }}"
   when: vm_group == 'nodes' or vm_group == 'infra'
-  ignore_errors: no
+  ignore_errors: yes
 
 - name: Ping result
   debug: "var=ip_address.results"
   ignore_errors: yes
-  #when: not ip_address.results[0].skipped
+
+- name: "Failed to ping {{ ip_address.results[0].stdout }}.{{ domain }} "
+  fail:
+    msg: "ERROR: {{  ip_address.results[0].stderr }} "
+  when: ip_address is failed
+    #("'Name or service not known' in ip_address.results[0].stderr" and   ip_address.results[0].stderr != "")
 
 - include_tasks: save_ip.yml
   with_items: "{{ ip_address.results }}"
   loop_control:
     loop_var: ip_addr
-  #when: not ip_address.results[0].skipped

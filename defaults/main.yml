@@ -1,6 +1,7 @@
 ---
 # defaults file for openshift-inventory
-inventory_destination: ~/workspace/openshift-inventory/tests
+deployment_type: standard
+inventory_destination: ~/workspace/openshift-inventory/inventory
 instances:
   - name: master
     cluster_group: masters
@@ -18,8 +19,8 @@ domain: example.com # do not put a . in front of domain
 glusterfs: True
 htpasswd_file_path: /home/example/openshift-ansible/passwordFile
 openshift_release: "3.11"
-openshift_image_tag: v3.11.135
-openshift_pkg_version: -3.11.125
+openshift_image_tag: v3.11.141
+openshift_pkg_version: -3.11.141
 openshift_deployment_type: openshift-enterprise
 rhsm_username: ""
 rhsm_password: ""

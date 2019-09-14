@@ -1,38 +1,170 @@
 OpenShift Inventory Generator
 =========
 
-This role will create an OpenShift v3.11 inventory for glusterfs based deployments.
+This role will create an OpenShift v3.11 inventory for different type of deployment .
 
 Requirements
 ------------
-
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- Ansible
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
+| Variables                     | Required | Default                                      | Description                                                                                                                     |
+|-------------------------------|----------|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| deployment_type               | X        | cns                                          | Defines the deployment type.                                                                                                    |
+| inventory_destination         | X        | /tmp                                         | Defines destination of inventory file                                                                                           |
+| instances                     | X        |                                              | Defines the name of master, infra, nodes and load  load balancers deployed on system. The name automatically increments 01,02.  |
+| - name                        | X        | - master - infra - node - lb                 | Defines the default name of the machine                                                                                         |
+| - cluster_group               | X        |  - masters - infra - nodes - lbs             | Defines the cluster group for the enviornment. The is used to group the machines in the inventory.                              |
+| - qty                         | X        | - 1 - 2 - 2 - 1                              | Defines the number of each vm in the inventory file                                                                             |
+| domain                        | X        | example.com                                  | The default domain for the OpenShift Cluster                                                                                    |
+| glusterfs                     | X        | True                                         | Red Hat Gluster Storage used for converged mode for persistent storage  and dynamic provisioning for storage.                   |
+| htpasswd_file_path            | X        | /home/example/openshift-ansible/passwordFile | Path to htpasswd file                                                                                                           |
+| openshift_release             | X        | 3.11                                         | OpenShift 3.11 release                                                                                                          |
+| openshift_image_tag           | X        | v3.11.141                                    | Specify an exact container image tag to install or configure.                                                                   |
+| openshift_pkg_version         | X        | -3.11.141                                    | Specify an exact rpm version to install or configure.                                                                           |
+| openshift_deployment_type     | X        | openshift-enterprise                         |                                                                                                                                 |
+| rhsm_username                 | X        |                                              | Red Hat user name required for openshift-enterprise                                                                             |
+| rhsm_password                 | X        |                                              | Red Hat password required for  openshift-enterprise                                                                             |
+| ssh_username                  | X        |                                              | Default usernmae to ssh into machines                                                                                           |
+| glusterfs_block_host_vol_size |          | 190                                          | Sets the size of the gluster block storage if enabled                                                                           |
+| metrics_storage_volume_size   |          | 10Gi                                         | Sets the size of metrics if enabled.                                                                                            |
+| Features                      |          |                                              |                                                                                                                                 |
+| enable_firewalld              |          | True                                         | Set to true to use firewalld instead of the default iptables.                                                                   |
+| enable_openshift_operators    |          | True                                         | Enable Operator Lifecycle Manager (OLM)                                                                                         |
+| enable_metrics                |          | True                                         | Enable cluster metrics during cluster installation.                                                                             |
+| enable_logging                |          | False                                        | Enable cluster logging during cluster installation                                                                              |
+| enable_prometheous_operator   |          | False                                        |                                                                                                                                 |
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
 Example Playbook
 ----------------
+**Minimal**
+```
+- hosts: localhost
+  gather_facts: no
+  vars:
+    ansible_connection: local
+    remote_user: root
+    deployment_type: minimal
+    inventory_destination: invenory.3.11.rhel.minimal
+    instances:
+      - name: master
+        cluster_group: masters
+        qty: 1
+      - name: infra
+        cluster_group: infra
+        qty: 2
+      - name: node
+        cluster_group: nodes
+        qty: 2
+      - name: lb
+        cluster_group: lbs
+        qty: 0
+    domain: example.com # do not put a . in front of domain
+    glusterfs: False
+    htpasswd_file_path: "/home/example/openshift-ansible/passwordFile"
+    openshift_release: "3.11"
+    openshift_image_tag: v3.11.141
+    openshift_pkg_version: -3.11.141
+    openshift_deployment_type: openshift-enterprise
+    ssh_username: example
+    rhsm_username: "example"
+    rhsm_password: "StrongPa22"
+    enable_firewalld: True
+  tasks:
+    - include_role:
+        name: openshift-inventory
+```
+**Minimal Container Native Storage**
+```
+- hosts: localhost
+  gather_facts: no
+  vars:
+    ansible_connection: local
+    remote_user: root
+    deployment_type: minimal
+    inventory_destination: invenory.3.11.rhel.minimal.gluster
+    instances:
+      - name: master
+        cluster_group: masters
+        qty: 1
+      - name: infra
+        cluster_group: infra
+        qty: 2
+      - name: node
+        cluster_group: nodes
+        qty: 2
+      - name: lb
+        cluster_group: lbs
+        qty: 0
+    domain: example.com # do not put a . in front of domain
+    glusterfs: True
+    htpasswd_file_path: "/home/example/openshift-ansible/passwordFile"
+    openshift_release: "3.11"
+    openshift_image_tag: v3.11.141
+    openshift_pkg_version: -3.11.141
+    openshift_deployment_type: openshift-enterprise
+    ssh_username: example
+    rhsm_username: "example"
+    rhsm_password: "StrongPa22"
+    enable_firewalld: True
+  tasks:
+    - include_role:
+        name: openshift-inventory
+```
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
+**OpenShift Container Native Storage**
+```
+- hosts: localhost
+  gather_facts: no
+  vars:
+    ansible_connection: local
+    remote_user: root
+    deployment_type: standard
+    inventory_destination: inventory.3.11.rhel.gluster
+    instances:
+      - name: master
+        cluster_group: masters
+        qty: 1
+      - name: infra
+        cluster_group: infra
+        qty: 2
+      - name: node
+        cluster_group: nodes
+        qty: 2
+      - name: lb
+        cluster_group: lbs
+        qty: 0
+    domain: example.com # do not put a . in front of domain
+    glusterfs: True
+    htpasswd_file_path: "/home/example/openshift-ansible/passwordFile"
+    openshift_release: "3.11"
+    openshift_image_tag: v3.11.141
+    openshift_pkg_version: -3.11.141
+    openshift_deployment_type: openshift-enterprise
+    ssh_username: example
+    rhsm_username: "example"
+    rhsm_password: "StrongPa22"
+    enable_firewalld: True
+    glusterfs_block_host_vol_size: 190
+    enable_openshift_operators: True
+    enable_logging: False
+    enable_prometheous_operator: False
+    enable_metrics: True
+    metrics_storage_volume_size: 10Gi
+  tasks:
+    - include_role:
+        name: openshift-inventory
+```
 License
 -------
 
-BSD
+GPLv3
 
 Author Information
 ------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+This role was created in 2019 by [Tosin Akinosho](http://github.com/tosin2013)
