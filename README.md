@@ -13,7 +13,8 @@ Role Variables
 | Variables                     | Required | Default                                      | Description                                                                                                                     |
 |-------------------------------|----------|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
 | deployment_type               | X        | standard                                          | Defines the deployment type.                                                                                                    |
-| inventory_destination         | X        | ~/workspace/openshift-inventory/inventory                                         | Defines destination of inventory file                                                                                           |
+| inventory_destination         | X        | ~/workspace/openshift-inventory/inventory                                         | Defines destination of inventory file
+| preappend_host_name         | X        | ocp-                                      | preappend ocp-  to the beginning of computer name example ocp1-master01.example.com                                                                                       |
 | instances                     | X        |                                              | Defines the name of master, infra, nodes and load  load balancers deployed on system. The name automatically increments 01,02.  |
 | - name                        | X        | - master - infra - node - lb                 | Defines the default name of the machine                                                                                         |
 | - cluster_group               | X        |  - masters - infra - nodes - lbs             | Defines the cluster group for the enviornment. The is used to group the machines in the inventory.                              |
@@ -51,6 +52,7 @@ Example Playbook
     remote_user: root
     deployment_type: minimal
     inventory_destination: inventory.3.11.rhel.minimal
+    preappend_host_name: ocp-
     instances:
       - name: master
         cluster_group: masters
@@ -88,6 +90,7 @@ Example Playbook
     remote_user: root
     deployment_type: minimal-cns
     inventory_destination: inventory.3.11.rhel.minimal.gluster
+    preappend_host_name: ocp-
     instances:
       - name: master
         cluster_group: masters
@@ -127,6 +130,7 @@ Example Playbook
     remote_user: root
     deployment_type: standard
     inventory_destination: inventory.3.11.rhel.gluster
+    preappend_host_name: ocp-
     instances:
       - name: master
         cluster_group: masters

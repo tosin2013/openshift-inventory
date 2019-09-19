@@ -1,7 +1,7 @@
 - name: update masters inventory
   vars:
     cluster_group: "{{ outer_item.cluster_group }}"
-    name: "{{append_host_name}}{{ outer_item.name }}{{ '%02x' |format(inner_item) }}"
+    name: "{{ preappend_host_name }}{{ outer_item.name }}{{ '%02x' |format(inner_item) }}"
   lineinfile:
     path: "{{ inventory_dir }}/{{ group }}"
     #line: "{{ name }}"
