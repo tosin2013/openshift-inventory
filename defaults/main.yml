@@ -1,6 +1,7 @@
 ---
 # defaults file for openshift-inventory
 deployment_type: standard
+append_host_name: ocp-
 inventory_destination: ~/workspace/openshift-inventory/inventory
 instances:
   - name: master

@@ -17,9 +17,11 @@ openshift_image_tag={{ openshift_image_tag }}
 openshift_pkg_version={{ openshift_pkg_version }}
 openshift_deployment_type={{ openshift_deployment_type }}
 
+{% if 'openshift-enterprise' == openshift_deployment_type %}
 oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
 oreg_auth_user={{ rhsm_username }}
 oreg_auth_password={{ rhsm_password }}
+{% endif %}
 
 openshift_disable_check=memory_availability,disk_availability
 
