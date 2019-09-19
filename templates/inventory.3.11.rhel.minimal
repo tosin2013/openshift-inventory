@@ -84,13 +84,13 @@ openshift_storage_glusterfs_block_storageclass_default=false
 # host group for nodes, includes region info
 [nodes]
 {% for all in all_nodes %}
-{% if 'ocp-master' in all %}
+{% if 'master' in all %}
 {{ all }}.{{ domain }} openshift_public_hostname={{ all }}.{{ domain }} openshift_node_group_name='node-config-master'
 {% endif %}
-{% if 'ocp-infra' in all %}
+{% if 'infra' in all %}
 {{ all }}.{{ domain }} openshift_public_hostname={{ all }}.{{ domain }} openshift_node_group_name='node-config-infra'
 {% endif %}
-{% if 'ocp-node' in all %}
+{% if 'node' in all %}
 {{ all }}.{{ domain }} openshift_public_hostname={{ all }}.{{ domain }} openshift_node_group_name='node-config-compute'
 {% endif %}
 {% endfor %}
@@ -98,10 +98,10 @@ openshift_storage_glusterfs_block_storageclass_default=false
 {% if glusterfs %}
 [glusterfs]
 {% for all in gluster_nodes %}
-{% if 'ocp-infra' in all.machine_name  %}
+{% if 'infra' in all.machine_name  %}
 {{ all.machine_name  }}.{{ domain }} glusterfs_ip={{ all.ip_address }} glusterfs_zone=1  glusterfs_devices='["/dev/vdc"]'
 {% endif %}
-{% if 'ocp-node' in all.machine_name  %}
+{% if 'node' in all.machine_name  %}
 {{ all.machine_name }}.{{ domain }} glusterfs_ip={{ all.ip_address }} glusterfs_zone=2  glusterfs_devices='["/dev/vdc"]'
 {% endif %}
 {% endfor %}
