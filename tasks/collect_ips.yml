@@ -10,7 +10,22 @@
   loop_control:
     loop_var: inner_item
     label: "{{ vm_name }}"
-  when: vm_group == 'nodes' or vm_group == 'infra'
+  when: vm_group == 'nodes' or vm_group == 'infra' and 'performance' not deployment_type
+  ignore_errors: yes
+
+- name: create inventory file for ips performance profile
+  vars:
+    vm_name: "{{ preappend_host_name }}{{ outer_item.name }}{{ '%02x' |format(inner_item) }}"
+    vm_group: "{{ outer_item.cluster_group }}"
+  shell: |
+     echo "$(ping -c1 {{ vm_name }}.{{ domain }} | sed -nE 's/^PING[^(]+\(([^)]+)\).*/\1/p'), {{ vm_name }}"
+  failed_when: "'service not known' in ip_address.stderr"
+  register: ip_address
+  loop: "{{ range(1, outer_item.qty|int +1)|list }}"
+  loop_control:
+    loop_var: inner_item
+    label: "{{ vm_name }}"
+  when: vm_group == 'nodes' or vm_group == 'masters' and 'performance' in deployment_type
   ignore_errors: yes
 
 - name: Ping result

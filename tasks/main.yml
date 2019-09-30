@@ -47,6 +47,12 @@
     dest: "{{ inventory_destination }}"
   when: "'standard' in deployment_type"
 
+- name: "deploy openshift template performace"
+  template:
+    src: templates/inventory.3.11.rhel.performance
+    dest: "{{ inventory_destination }}"
+  when: "'performance' in deployment_type"
+
 - name: "deploy openshift template minimal"
   template:
     src: templates/inventory.3.11.rhel.minimal

@@ -19,5 +19,14 @@
       my_ip: "{{ ip_addr.stdout.split(',')[0] }}"
   set_fact:
     gluster_nodes: "{{ gluster_nodes|default([]) + [ {'machine_name':  my_vm,    'ip_address': my_ip  }] }}"
-  when: ("'infra' in get_vm" or "'node' in get_vm")
+  when: ("'infra' in get_vm" or "'node' in get_vm")   and 'performance' not in deployment_type
+  ignore_errors: yes
+
+- name: Save info to gluster_nodes
+  vars:
+      my_vm:  "{{ ip_addr.stdout.split(',')[1] }}"
+      my_ip: "{{ ip_addr.stdout.split(',')[0] }}"
+  set_fact:
+    gluster_nodes: "{{ gluster_nodes|default([]) + [ {'machine_name':  my_vm,    'ip_address': my_ip  }] }}"
+  when: ("'master' in get_vm" or "'node' in get_vm")  and 'performance' in deployment_type
   ignore_errors: yes
