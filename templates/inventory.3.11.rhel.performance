@@ -55,7 +55,9 @@ ansible_become=true
 debug_level=2
 openshift_deployment_type={{ openshift_deployment_type }}
 openshift_release={{ openshift_release }}
-
+{% if lbs  is defined %}
+openshift_master_cluster_method=native
+{% endif %}
 
 {% if 'openshift-enterprise' == openshift_deployment_type %}
 openshift_pkg_version={{ openshift_pkg_version }}
